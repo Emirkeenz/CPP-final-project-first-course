@@ -1,24 +1,18 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <map>
 #include <bits/stdc++.h>
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 using namespace std;
 
+// Define a map to track room availability
+map<int, bool> roomAvailability;
+
 struct Booking {
   string name;
   int roomNumber;
-
-  // Serialize booking to JSON
-  void toJson(json& jsonData) const {
-    jsonData = json{{"name", name}, {"roomNumber", roomNumber}};
-  }
-
-  // Deserialize booking from JSON
-  void fromJson(const json& jsonData) {
-    jsonData.at("name").get_to(name);
-    jsonData.at("roomNumber").get_to(roomNumber);
-  }
 };
 
 vector<Booking> bookings;
@@ -31,14 +25,41 @@ void displayBookings() {
   }
 }
 
+// Function to display available rooms
+void displayAvailableRooms() {
+  cout << "Available rooms:" << endl;
+  for (const auto& room : roomAvailability) {
+    if (room.second) {
+      cout << "Room Number: " << room.first << endl;
+    }
+  }
+}
+
 // Function to add a booking
 void addBooking() {
   Booking newBooking;
   cout << "Enter name: ";
   getline(cin, newBooking.name);
+  
+  displayAvailableRooms();
+  
   cout << "Enter room number: ";
   cin >> newBooking.roomNumber;
   cin.ignore(); // Clear the input buffer
+  
+  auto it = roomAvailability.find(newBooking.roomNumber);
+  if (it == roomAvailability.end()) {
+    cout << "Invalid room number." << endl;
+    return;
+  }
+  
+  if (!it->second) {
+    cout << "Room " << newBooking.roomNumber << " is already booked. Please choose another room." << endl;
+    return;
+  }
+  
+  it->second = false; // Mark room as booked
+  
   bookings.push_back(newBooking);
   cout << "Booking added successfully." << endl;
 }
@@ -49,55 +70,73 @@ void cancelBooking() {
   cout << "Enter room number to cancel booking: ";
   cin >> roomNumber;
   cin.ignore(); // Clear the input buffer
-  for (auto it = bookings.begin(); it != bookings.end(); ++it) {
-    if (it->roomNumber == roomNumber) {
-      bookings.erase(it);
-      cout << "Booking cancelled successfully." << endl;
-      return;
+  
+  auto it = roomAvailability.find(roomNumber);
+  if (it != roomAvailability.end()) {
+    it->second = true; // Mark room as available
+    
+    for (auto bookIt = bookings.begin(); bookIt != bookings.end(); ++bookIt) {
+      if (bookIt->roomNumber == roomNumber) {
+        bookings.erase(bookIt);
+        cout << "Booking cancelled successfully." << endl;
+        return;
+      }
     }
   }
+  
   cout << "Booking not found." << endl;
 }
 
 // Function to save bookings to file
 void saveBookingsToFile() {
-  json j;
+  json jsonData;
   for (const Booking& booking : bookings) {
-    json bookingJson;
-    booking.toJson(bookingJson);
-    j.push_back(bookingJson);
+    jsonData.push_back({{"name", booking.name}, {"roomNumber", booking.roomNumber}});
   }
 
-  ofstream outFile("bookings.txt");
-  if (outFile.is_open()) {
-    outFile << j.dump(4); // Write formatted JSON with indentation
-    outFile.close();
+  ofstream fout("bookings.txt");
+  if (fout.is_open()) {
+    fout << jsonData.dump(2); // Write formatted JSON with indentation
+    fout.close();
   } else {
     cerr << "Unable to open file to save bookings." << endl;
   }
 }
 
-// Function to load bookings from file
+// Function to load bookings from file and update roomAvailability
 void loadBookingsFromFile() {
-  ifstream inFile("bookings.txt");
-  if (inFile.is_open()) {
-    json j;
-    inFile >> j;
-    inFile.close();
+  ifstream fin("bookings.txt");
+  if (fin.is_open()) {
+    json jsonData;
+    fin >> jsonData;
+    fin.close();
 
     bookings.clear(); // Clear existing bookings
+    roomAvailability.clear(); // Clear existing room availability
+    
+    // Initialize room availability with all rooms initially available
+    for (int roomNumber = 101; roomNumber <= 107; ++roomNumber) {
+      roomAvailability[roomNumber] = true;
+    }
 
-    for (const auto& bookingJson : j) {
+    for (const auto& bookingJson : jsonData) {
       Booking booking;
       booking.name = bookingJson["name"].get<string>();
       booking.roomNumber = bookingJson["roomNumber"].get<int>();
       bookings.push_back(booking);
+      
+      // Mark booked room as unavailable
+      auto it = roomAvailability.find(booking.roomNumber);
+      if (it != roomAvailability.end()) {
+        it->second = false;
+      }
     }
   }
 }
 
 int main() {
   loadBookingsFromFile(); // Load existing bookings from file
+  
   bool exit = false;
   int choice;
   while (!exit) {

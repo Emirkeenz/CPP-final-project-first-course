@@ -1,18 +1,18 @@
 [
-    {
-        "name": "Alice Smith",
-        "roomNumber": 102
-    },
-    {
-        "name": "Bob Johnson",
-        "roomNumber": 103
-    },
-    {
-        "name": "Emir",
-        "roomNumber": 104
-    },
-    {
-        "name": "Karina",
-        "roomNumber": 105
-    }
+  {
+    "name": "Bob Johnson",
+    "roomNumber": 103
+  },
+  {
+    "name": "Emir",
+    "roomNumber": 104
+  },
+  {
+    "name": "Karina",
+    "roomNumber": 105
+  },
+  {
+    "name": "Feruz",
+    "roomNumber": 102
+  }
 ]
