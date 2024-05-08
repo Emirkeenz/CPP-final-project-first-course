@@ -4,15 +4,15 @@
     "roomNumber": 103
   },
   {
-    "name": "Karina",
+    "name": "John Doe",
     "roomNumber": 105
   },
   {
-    "name": "Feruz",
+    "name": "Michael Jackson",
     "roomNumber": 102
   },
   {
-    "name": "Emir",
+    "name": "Jean Reno",
     "roomNumber": 106
   }
 ]
