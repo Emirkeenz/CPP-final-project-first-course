@@ -17,6 +17,8 @@ struct Booking {
 
 vector<Booking> bookings;
 
+const string ADMIN_PASSWORD = "admin123"; // Password for admin
+
 // Function to display all bookings
 void displayBookings() {
   cout << "Current bookings:" << endl;
@@ -36,10 +38,9 @@ void displayAvailableRooms() {
 }
 
 // Function to add a booking
-void addBooking() {
+void addBooking(const string& userName) {
   Booking newBooking;
-  cout << "Enter name: ";
-  getline(cin, newBooking.name);
+  newBooking.name = userName;
   
   displayAvailableRooms();
   
@@ -137,33 +138,92 @@ void loadBookingsFromFile() {
 int main() {
   loadBookingsFromFile(); // Load existing bookings from file
   
-  bool exit = false;
-  int choice;
-  while (!exit) {
-    cout << "\n1. Display bookings" << endl;
-    cout << "2. Add booking" << endl;
-    cout << "3. Cancel booking" << endl;
-    cout << "4. Exit" << endl;
-    cout << "Enter your choice: ";
-    cin >> choice;
-    cin.ignore(); // Clear the input buffer
-    switch (choice) {
-      case 1:
-        displayBookings();
-        break;
-      case 2:
-        addBooking();
-        break;
-      case 3:
-        cancelBooking();
-        break;
-      case 4:
-        cout << "Exiting..." << endl;
-        exit = true;
-        break;
-      default:
-        cout << "Invalid choice. Please enter a number between 1 and 4." << endl;
+  cout << "Welcome to the hotel booking system!" << endl;
+  cout << "Are you a guest or an administrator?" << endl;
+  cout << "Enter 'guest' or 'admin': ";
+  string role;
+  cin >> role;
+  cin.ignore(); // Clear the input buffer
+
+  string guestName;
+  string password;
+  
+  if (role == "guest") {
+    cout << "Welcome, guest!" << endl;
+    
+    bool exit = false;
+    int choice;
+    while (!exit) {
+      cout << "\n1. Display available rooms" << endl;
+      cout << "2. Book a room" << endl;
+      cout << "3. Exit" << endl;
+      cout << "Enter your choice: ";
+      cin >> choice;
+      cin.ignore(); // Clear the input buffer
+      switch (choice) {
+        case 1:
+          displayAvailableRooms();
+          break;
+        case 2:
+          cout << "Enter your name: ";
+          getline(cin, guestName);
+          addBooking(guestName);
+          break;
+        case 3:
+          cout << "Exiting..." << endl;
+          exit = true;
+          break;
+        default:
+          cout << "Invalid choice. Please enter a number between 1 and 3." << endl;
+      }
     }
+  } else if (role == "admin") {
+    cout << "Enter admin password: ";
+    string password;
+    getline(cin, password);
+    
+    if (password == ADMIN_PASSWORD) {
+      cout << "Welcome, admin!" << endl;
+      
+      bool exit = false;
+      int choice;
+      while (!exit) {
+        cout << "\n1. Display bookings" << endl;
+        cout << "2. Display available rooms" << endl;
+        cout << "3. Book a room" << endl;
+        cout << "4. Cancel booking" << endl;
+        cout << "5. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+        cin.ignore(); // Clear the input buffer
+        switch (choice) {
+          case 1:
+            displayBookings();
+            break;
+          case 2:
+            displayAvailableRooms();
+            break;
+          case 3:
+            cout << "Enter guest name: ";
+            getline(cin, guestName);
+            addBooking(guestName);
+            break;
+          case 4:
+            cancelBooking();
+            break;
+          case 5:
+            cout << "Exiting..." << endl;
+            exit = true;
+            break;
+          default:
+            cout << "Invalid choice. Please enter a number between 1 and 5." << endl;
+        }
+      }
+    } else {
+      cout << "Incorrect password. Access denied." << endl;
+    }
+  } else {
+    cout << "Invalid role. Exiting..." << endl;
   }
 
   saveBookingsToFile(); // Save bookings to file before exiting

@@ -4,15 +4,15 @@
     "roomNumber": 103
   },
   {
-    "name": "Emir",
-    "roomNumber": 104
-  },
-  {
     "name": "Karina",
     "roomNumber": 105
   },
   {
     "name": "Feruz",
     "roomNumber": 102
+  },
+  {
+    "name": "Emir",
+    "roomNumber": 106
   }
 ]
