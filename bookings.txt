@@ -8,11 +8,11 @@
     "roomNumber": 105
   },
   {
-    "name": "Michael Jackson",
-    "roomNumber": 102
-  },
-  {
     "name": "Jean Reno",
     "roomNumber": 106
+  },
+  {
+    "name": "Napaleon Bonapart",
+    "roomNumber": 104
   }
 ]
