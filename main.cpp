@@ -88,6 +88,77 @@ void cancelBooking() {
   cout << "Booking not found." << endl;
 }
 
+// Function to cancel a booking for guests
+void cancelBookingGuest(const string& userName) {
+  cout << "Your bookings:" << endl;
+  bool foundBooking = false;
+  for (auto it = bookings.begin(); it != bookings.end(); ++it) {
+    if (it->name == userName) {
+      cout << "Room Number: " << it->roomNumber << endl;
+      foundBooking = true;
+    }
+  }
+  
+  if (!foundBooking) {
+    cout << "You have no bookings to cancel." << endl;
+    return;
+  }
+  
+  int roomNumber;
+  cout << "Enter room number to cancel booking: ";
+  cin >> roomNumber;
+  cin.ignore(); // Clear the input buffer
+  
+  auto it = roomAvailability.find(roomNumber);
+  if (it != roomAvailability.end()) {
+    it->second = true; // Mark room as available
+    
+    for (auto bookIt = bookings.begin(); bookIt != bookings.end(); ++bookIt) {
+      if (bookIt->roomNumber == roomNumber && bookIt->name == userName) {
+        bookings.erase(bookIt);
+        cout << "Booking cancelled successfully." << endl;
+        return;
+      }
+    }
+  }
+  
+  cout << "Booking not found or you do not have permission to cancel this booking." << endl;
+}
+
+// Function for guest menu
+void guestMenu(const string& guestName) {
+  cout << "Welcome, " << guestName << "!" << endl;
+    
+  bool exit = false;
+  int choice;
+  while (!exit) {
+    cout << "\n1. Display available rooms" << endl;
+    cout << "2. Book a room" << endl;
+    cout << "3. Cancel booking" << endl; // Added cancel booking option
+    cout << "4. Exit" << endl;
+    cout << "Enter your choice: ";
+    cin >> choice;
+    cin.ignore(); // Clear the input buffer
+    switch (choice) {
+      case 1:
+        displayAvailableRooms();
+        break;
+      case 2:
+        addBooking(guestName);
+        break;
+      case 3:
+        cancelBookingGuest(guestName); // Call cancelBookingGuest for guests
+        break;
+      case 4:
+        cout << "Exiting..." << endl;
+        exit = true;
+        break;
+      default:
+        cout << "Invalid choice. Please enter a number between 1 and 4." << endl;
+    }
+  }
+}
+
 // Function to save bookings to file
 void saveBookingsToFile() {
   json jsonData;
@@ -149,34 +220,9 @@ int main() {
   string password;
   
   if (role == "guest") {
-    cout << "Welcome, guest!" << endl;
-    
-    bool exit = false;
-    int choice;
-    while (!exit) {
-      cout << "\n1. Display available rooms" << endl;
-      cout << "2. Book a room" << endl;
-      cout << "3. Exit" << endl;
-      cout << "Enter your choice: ";
-      cin >> choice;
-      cin.ignore(); // Clear the input buffer
-      switch (choice) {
-        case 1:
-          displayAvailableRooms();
-          break;
-        case 2:
-          cout << "Enter your name: ";
-          getline(cin, guestName);
-          addBooking(guestName);
-          break;
-        case 3:
-          cout << "Exiting..." << endl;
-          exit = true;
-          break;
-        default:
-          cout << "Invalid choice. Please enter a number between 1 and 3." << endl;
-      }
-    }
+    cout << "Enter your name: ";
+    getline(cin, guestName);
+    guestMenu(guestName); // Call guestMenu function
   } else if (role == "admin") {
     cout << "Enter admin password: ";
     string password;
