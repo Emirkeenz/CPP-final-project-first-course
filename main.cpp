@@ -22,6 +22,10 @@ const string ADMIN_PASSWORD = "admin123"; // Password for admin
 // Function to display all bookings
 void displayBookings() {
   cout << "Current bookings:" << endl;
+  if (bookings.empty()) {
+    cout << "No current bookings." << endl;
+    return;
+  }
   for (const Booking& booking : bookings) {
     cout << "Name: " << booking.name << ", Room Number: " << booking.roomNumber << endl;
   }

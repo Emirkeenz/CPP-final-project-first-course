@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Donald Trump",
+    "roomNumber": 101
+  },
+  {
+    "name": "Cillian Murphy",
+    "roomNumber": 102
+  },
+  {
+    "name": "Bob Johnson",
+    "roomNumber": 103
+  },
+  {
+    "name": "Napaleon Bonapart",
+    "roomNumber": 104
+  },
+  {
+    "name": "John Doe",
+    "roomNumber": 105
+  },
+  {
+    "name": "Jean Reno",
+    "roomNumber": 106
+  },
+  {
+    "name": "Natalie Portman",
+    "roomNumber": 107
+  }
+]
