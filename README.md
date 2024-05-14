@@ -1,5 +1,7 @@
-Hotel Booking System
+# Hotel Booking System
+
 Description
+
 The Hotel Booking System is a C++ application designed to facilitate hotel room reservation management. It allows guests to view available rooms, make bookings, and cancel reservations. Administrators can view all bookings, manage room availability, and handle booking cancellations.
 
 Objectives
@@ -9,6 +11,7 @@ Maintain accurate records of bookings and room availability.
 Enhance the overall experience of both guests and administrators in handling hotel reservations.
 
 Screenshots
+
 <img width="330" alt="Снимок экрана 2024-05-08 в 21 55 46" src="https://github.com/Emirkeenz/C-final-project-first-course/assets/119420721/7795272c-7ee8-4324-940f-56c7ce8c7a8a">
 
 <img width="281" alt="Снимок экрана 2024-05-08 в 21 56 13" src="https://github.com/Emirkeenz/C-final-project-first-course/assets/119420721/6c7220db-91ad-43b0-b4c1-c9dc51e422d5">
